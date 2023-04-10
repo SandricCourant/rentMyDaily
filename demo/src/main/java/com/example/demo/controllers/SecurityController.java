@@ -1,5 +1,6 @@
 package com.example.demo.controllers;
 
+import com.example.demo.domain.Owner;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.exceptions.AccountExistsException;
@@ -8,15 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1")
 public class SecurityController {
-
     @Autowired
     private JwtUserService jwtUserService;
 
@@ -31,7 +28,14 @@ public class SecurityController {
 
         return ResponseEntity.ok(response);
     }
-
+    @GetMapping("/register")
+    public ResponseEntity<AuthResponseDto> getBidon() throws Exception{
+        Owner owner = new Owner();
+        owner.setLogin("userBidon");
+        AuthResponseDto response = new AuthResponseDto();
+        response.setUser(owner);
+        return ResponseEntity.ok(response);
+    }
     @PostMapping("/authorize")
     public ResponseEntity<AuthResponseDto> authorize(@RequestBody AuthRequestDto dto) throws Exception {
         Authentication authentication = jwtUserService.authenticate(dto.getUsername(), dto.getPassword());
