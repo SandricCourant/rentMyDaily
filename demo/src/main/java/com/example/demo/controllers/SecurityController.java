@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-
+@CrossOrigin
 @RestController
 @RequestMapping("/api/v1")
 public class SecurityController {
@@ -26,14 +26,6 @@ public class SecurityController {
         response.setToken(jwt);
         response.setUser(user);
 
-        return ResponseEntity.ok(response);
-    }
-    @GetMapping("/register")
-    public ResponseEntity<AuthResponseDto> getBidon() throws Exception{
-        Owner owner = new Owner();
-        owner.setLogin("userBidon");
-        AuthResponseDto response = new AuthResponseDto();
-        response.setUser(owner);
         return ResponseEntity.ok(response);
     }
     @PostMapping("/authorize")

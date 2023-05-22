@@ -41,6 +41,8 @@ public class SecurityConfigurer {
         http = http.authorizeHttpRequests((r) ->
                 r.requestMatchers("/api/v1/register").permitAll()
                 .requestMatchers("/api/v1/authorize").permitAll()
+                        .requestMatchers("/api/v1/upload").permitAll()
+                        .requestMatchers("/api/v1/download").permitAll()
                         .anyRequest().authenticated()
 
         );
