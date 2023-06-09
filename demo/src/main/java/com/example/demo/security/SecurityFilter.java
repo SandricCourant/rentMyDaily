@@ -29,7 +29,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             String incomingJwt = header.substring(7);
             UserDetails user = jwtUserService.getUserFromJwt(incomingJwt);
 
-            // On le passe aux controllers grâce au context
+            // On le passe aux controllers grace au context
             Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
         } catch (Exception e) {
