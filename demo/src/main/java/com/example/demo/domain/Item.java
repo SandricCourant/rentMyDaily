@@ -1,6 +1,7 @@
 package com.example.demo.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -12,12 +13,13 @@ public class Item {
     private int id;
     private String name;
     private Boolean status;
+    @JsonIgnore
     @ManyToMany
     private Collection<SubCategory> subCategories;
+    @JsonIgnore
     @ManyToOne
     private Owner owner;
-    private String descriptions;
-    private Collection<String> photos;
+    private String description;
     public int getId() {
         return id;
     }
@@ -48,5 +50,31 @@ public class Item {
 
     public void setUser(Owner owner) {
         this.owner = owner;
+    }
+
+    public Collection<SubCategory> getSubCategories() {
+        return subCategories;
+    }
+
+    public void setSubCategories(Collection<SubCategory> subCategories) {
+        this.subCategories = subCategories;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
