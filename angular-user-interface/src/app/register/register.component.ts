@@ -10,6 +10,10 @@ import { Router } from '@angular/router';
 export class RegisterComponent implements OnInit{
   username: string = "";
   password: string = "";
+  firstname: string = "";
+  lastname: string = "";
+  email: string = "";
+  phoneNumber: string = "";
 
   constructor(private router: Router, private userService: UserService) { }
 
@@ -21,7 +25,7 @@ export class RegisterComponent implements OnInit{
   }
 
   onSubmitForm() {
-    this.userService.postRegister(this.username, this.password).subscribe((data: any) => {
+    this.userService.postRegister(this.username, this.password, this.firstname, this.lastname, this.email, this.phoneNumber).subscribe((data: any) => {
       console.log(data);
       localStorage.setItem('token', data.token);
       this.onContinue();

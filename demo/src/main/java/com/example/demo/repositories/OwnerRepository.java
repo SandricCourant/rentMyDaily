@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface OwnerRepository extends CrudRepository<Owner, Integer> {
 
+    Owner findByLoginOrEmailOrPhoneNumber(String login, String email, String phoneNumber);
     Owner findByLogin(String login);
 
 }

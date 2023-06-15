@@ -13,8 +13,8 @@ export class UserService {
   postAuthorize(username: string, password: string){
     return this.http.post(this.apiUrlAuthorize, {username, password});
   }
-  postRegister(username: string, password: string){
-    return this.http.post(this.apiUrlRegister, {username, password});
+  postRegister(username: string, password: string, firstname: string, lastname: string, email: string, phoneNumber: string){
+    return this.http.post(this.apiUrlRegister, {username, password, firstname, lastname, email, phoneNumber});
   }
 
   clear(){

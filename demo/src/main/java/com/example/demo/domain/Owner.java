@@ -16,6 +16,14 @@ public class Owner implements UserDetails {
     private int id;
     private String login;
 
+    private String email;
+    private String phoneNumber;
+
+    private String firstname;
+    private String lastname;
+    @JsonIgnore
+    @OneToMany(mappedBy = "owner")
+    private Collection<Item> items;
     @JsonIgnore
     private String password;
 
@@ -83,5 +91,37 @@ public class Owner implements UserDetails {
 
     public void setRoles(Collection<Role> roles) {
         this.roles = roles;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getFirstname() {
+        return firstname;
+    }
+
+    public void setFirstname(String firstname) {
+        this.firstname = firstname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
+    public void setLastname(String lastname) {
+        this.lastname = lastname;
     }
 }

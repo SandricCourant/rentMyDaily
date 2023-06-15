@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 @RestController
 @RequestMapping("/api/v1")
 public class RoleController {
-
+    //TODO  INSERT INTO role(name) VALUES('ROLE_ADMIN'); INSERT INTO owner_roles(owner_id, roles_id) VALUES(idAdmin, idRole_Admin); BEFORE use it
     @Autowired
     private RoleService roleService;
 

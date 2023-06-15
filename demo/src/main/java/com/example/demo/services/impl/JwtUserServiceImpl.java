@@ -42,19 +42,16 @@ public class JwtUserServiceImpl implements JwtUserService {
         Date expiryDate = new Date(now.getTime() + 3600 * 1000);
         String username = user.getUsername();
 
-        String jwt = Jwts.builder().
+        return Jwts.builder().
                 setSubject(username).setIssuedAt(now).setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, signingKey).compact();
-
-        return jwt;
     }
 
     @Override
     public UserDetails getUserFromJwt(String jwt) {
         Claims claims = Jwts.parser().setSigningKey(signingKey).parseClaimsJws(jwt).getBody();
         String username = claims.getSubject();
-        UserDetails user = loadUserByUsername(username);
-        return user;
+        return loadUserByUsername(username);
     }
 
     @Override
@@ -65,8 +62,8 @@ public class JwtUserServiceImpl implements JwtUserService {
     }
 
     @Override
-    public UserDetails save(String username, String password) throws AccountExistsException {
-        UserDetails user = ownerRepository.findByLogin(username);
+    public UserDetails save(String username, String password, String firstname, String lastname, String email, String phoneNumber) throws AccountExistsException {
+        UserDetails user = ownerRepository.findByLoginOrEmailOrPhoneNumber(username, email, phoneNumber);
         if (user != null) {
             throw new AccountExistsException();
         }
@@ -74,8 +71,12 @@ public class JwtUserServiceImpl implements JwtUserService {
         Owner owner = new Owner();
         owner.setLogin(username);
         owner.setPassword(passwordEncoder.encode(password));
-        ownerRepository.save(owner);
-        return owner;
+        owner.setFirstname(firstname);
+        owner.setLastname(lastname);
+        owner.setEmail(email);
+        owner.setPhoneNumber(phoneNumber);
+
+        return ownerRepository.save(owner);
     }
 
     @Override
