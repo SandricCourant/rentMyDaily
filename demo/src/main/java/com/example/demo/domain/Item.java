@@ -19,8 +19,6 @@ public class Item {
     @JsonIgnore
     @ManyToOne
     private Owner owner;
-    @OneToMany
-    private Collection<Image> images;
     private String description;
     public int getId() {
         return id;
@@ -68,10 +66,6 @@ public class Item {
 
     public String getDescription() {
         return description;
-    }
-
-    public Collection<Image> getImages() {
-        return images;
     }
 
     @Override

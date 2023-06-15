@@ -1,6 +1,5 @@
 package com.example.demo.services;
 
-import com.example.demo.domain.Image;
 import com.example.demo.domain.Item;
 import com.example.demo.domain.Owner;
 
