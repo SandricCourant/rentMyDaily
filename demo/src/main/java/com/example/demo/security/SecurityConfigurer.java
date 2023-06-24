@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,22 +31,14 @@ public class SecurityConfigurer {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
         // Standard pour les REST API
-        http = http.cors().and().csrf().disable();
-        http = http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and();
+        http = http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth ->
+                        auth.requestMatchers("/api/v1/account/**").permitAll()
+                                .anyRequest().authenticated()
+                );
 
-        // On place notre filter dans le middleware
-        http = http.addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // Si vous venez du web et souhaitez le faire dans le sens inverse
-        // Détermination des endpoints privées
-        http = http.authorizeHttpRequests((r) ->
-                r.requestMatchers("/api/v1/register").permitAll()
-                .requestMatchers("/api/v1/authorize").permitAll()
-                        .requestMatchers("/api/v1/upload").permitAll()
-                        .requestMatchers("/api/v1/download").permitAll()
-                        .anyRequest().authenticated()
-
-        );
         return http.build();
     }
 

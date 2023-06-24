@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 @CrossOrigin()
 @RestController
-@RequestMapping("/api/v1/myAccount")
+@RequestMapping("/api/v1")
 public class ProfileController {
     @Autowired
     ItemService itemService;
