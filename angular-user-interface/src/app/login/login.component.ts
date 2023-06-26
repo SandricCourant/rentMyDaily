@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -12,7 +12,7 @@ export class LoginComponent implements OnInit{
   username: string = "";
   password: string = "";
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit{
   }
 
   onSubmitForm() {
-    this.userService.postAuthorize(this.username, this.password).subscribe((data: any) => {
+    this.authService.postAuthorize(this.username, this.password).subscribe((data: any) => {
       console.log(data);
-      localStorage.setItem('token', data.token);
+      this.authService.setToken(data.token)
       this.onContinue();
     })
   }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../services/user.service';
+import { AuthService } from '../services/auth.service';
 import { Router } from '@angular/router';
 
 @Component({
@@ -15,7 +15,7 @@ export class RegisterComponent implements OnInit{
   email: string = "";
   phoneNumber: string = "";
 
-  constructor(private router: Router, private userService: UserService) { }
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit(): void {
   }
@@ -25,9 +25,9 @@ export class RegisterComponent implements OnInit{
   }
 
   onSubmitForm() {
-    this.userService.postRegister(this.username, this.password, this.firstname, this.lastname, this.email, this.phoneNumber).subscribe((data: any) => {
+    this.authService.postRegister(this.username, this.password, this.firstname, this.lastname, this.email, this.phoneNumber).subscribe((data: any) => {
       console.log(data);
-      localStorage.setItem('token', data.token);
+      this.authService.setToken(data.token);
       this.onContinue();
     })
   }
