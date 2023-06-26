@@ -8,6 +8,7 @@ const API_URL = "http://localhost:8443/api/v1/account";
   providedIn: 'root'
 })
 export class AuthService {
+  login: boolean = false;
 
   constructor(private http: HttpClient) {}
 
@@ -27,4 +28,10 @@ export class AuthService {
     localStorage.clear();
   }
   
+  setLogin(login: boolean){
+    this.login = login;
+  }
+  getLogin(): boolean{
+    return this.login;
+  }
 }

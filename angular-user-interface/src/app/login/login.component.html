@@ -1,6 +1,6 @@
 <div class="logo"><img src="assets\images\rentMydailyLogoNoFill.png" alt="Logo du site symbolisant une vague verte souflant la poussière de vos objets"></div>
 
-<form (ngSubmit)="onSubmitForm()">
+<form #f="ngForm" (ngSubmit)="f.form.valid && onSubmitForm()">
     <h1>Connexion</h1>
     <div>
         <label for="login">Identifiant: </label>
@@ -13,5 +13,7 @@
     <div class="button">
         <button type="submit">Connexion</button>
     </div>
-
+    <div class="alert" *ngIf="f.submitted && !isLogin()">
+        <p>Login failed</p>
+    </div>
 </form>

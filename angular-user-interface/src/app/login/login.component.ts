@@ -11,6 +11,8 @@ import { AuthService } from '../services/auth.service';
 export class LoginComponent implements OnInit{
   username: string = "";
   password: string = "";
+  login = false;
+
 
   constructor(private router: Router, private authService: AuthService) { }
 
@@ -25,7 +27,12 @@ export class LoginComponent implements OnInit{
     this.authService.postAuthorize(this.username, this.password).subscribe((data: any) => {
       console.log(data);
       this.authService.setToken(data.token)
+      this.authService.setLogin(true);
       this.onContinue();
-    })
+    });
+    this.login = this.authService.getLogin();
+  }
+  isLogin(): boolean{
+    return this.login;
   }
 }

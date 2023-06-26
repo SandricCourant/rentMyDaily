@@ -32,7 +32,7 @@ export class AuthInterceptor implements HttpInterceptor {
          }
          if( err.status === 403){
             // redirect user to login with warning
-            console.log("erreur de connexion");
+            this.authService.setLogin(false);
          }
       }
       return throwError(() => err);
