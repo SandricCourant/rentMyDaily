@@ -36,6 +36,7 @@ public class SecurityConfigurer {
                 .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/api/v1/account/**").permitAll()
+                                .requestMatchers("/api/v1/items/view").permitAll()
                                 .anyRequest().authenticated()
                 ).build();
     }

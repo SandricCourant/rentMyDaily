@@ -25,4 +25,9 @@ public class ItemServiceImpl implements ItemService {
 
         return itemRepository.save(newItem);
     }
+
+    @Override
+    public Iterable<Item> getItems() {
+        return itemRepository.findAll();
+    }
 }

@@ -16,8 +16,8 @@ public class Item {
     @JsonIgnore
     @ManyToMany
     private Collection<SubCategory> subCategories;
-    @JsonIgnore
     @ManyToOne
+    @JsonIgnore
     private Owner owner;
     private String description;
     public int getId() {
