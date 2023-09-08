@@ -3,3 +3,4 @@
 .idea
 demo/target/
 demo/out/
+demo/src/main/resources/META-INF/

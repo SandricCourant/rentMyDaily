@@ -19,8 +19,7 @@ public class RoleServiceImpl implements RoleService {
     public Role create(String name) {
         Role role = new Role();
         role.setName(name);
-        roleRepository.save(role);
-        return role;
+        return roleRepository.save(role);
     }
 
     @Override
@@ -30,10 +29,7 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public void attach(UserDetails user, int id) {
-        GrantedAuthority role = roleRepository.findById(id).orElse(null);
-        if (role != null) {
-            ((Collection<GrantedAuthority>) user.getAuthorities()).add(role);
-        }
+        roleRepository.findById(id).ifPresent(role -> ((Collection<GrantedAuthority>) user.getAuthorities()).add(role));
     }
 
     @Override
