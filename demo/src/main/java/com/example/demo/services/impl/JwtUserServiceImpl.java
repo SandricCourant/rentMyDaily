@@ -22,19 +22,16 @@ import java.util.Date;
 public class JwtUserServiceImpl implements JwtUserService {
 
     private final String signingKey;
+    @Autowired
+    private AuthenticationConfiguration authenticationConfiguration;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private OwnerRepository ownerRepository;
 
     public JwtUserServiceImpl() {
         this.signingKey = "motdepassebien";
     }
-
-    @Autowired
-    private AuthenticationConfiguration authenticationConfiguration;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private OwnerRepository ownerRepository;
 
     @Override
     public String generateJwtForUser(UserDetails user) {
@@ -42,9 +39,7 @@ public class JwtUserServiceImpl implements JwtUserService {
         Date expiryDate = new Date(now.getTime() + 3600 * 1000);
         String username = user.getUsername();
 
-        return Jwts.builder().
-                setSubject(username).setIssuedAt(now).setExpiration(expiryDate)
-                .signWith(SignatureAlgorithm.HS512, signingKey).compact();
+        return Jwts.builder().setSubject(username).setIssuedAt(now).setExpiration(expiryDate).signWith(SignatureAlgorithm.HS512, signingKey).compact();
     }
 
     @Override

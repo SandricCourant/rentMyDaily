@@ -5,5 +5,6 @@ import com.example.demo.domain.Owner;
 
 public interface ItemService {
     Item saveItem(String name, String description, Owner user);
+
     Iterable<Item> getItems();
 }

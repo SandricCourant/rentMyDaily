@@ -1,6 +1,5 @@
 package com.example.demo.controllers;
 
-import com.example.demo.domain.Owner;
 import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.RegisterRequestDto;
@@ -11,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
 @CrossOrigin()
 @RestController
 @RequestMapping("/api/v1/account")
@@ -29,6 +29,7 @@ public class SecurityController {
 
         return ResponseEntity.ok(response);
     }
+
     @PostMapping("/authorize")
     public ResponseEntity<AuthResponseDto> authorize(@RequestBody AuthRequestDto dto) throws Exception {
         Authentication authentication = jwtUserService.authenticate(dto.getUsername(), dto.getPassword());

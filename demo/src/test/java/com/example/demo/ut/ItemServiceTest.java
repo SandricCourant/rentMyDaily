@@ -27,7 +27,7 @@ public class ItemServiceTest {
     private ItemRepository mockItemRepository;
 
     @Test
-    public void testSaveItem() throws Exception{
+    public void testSaveItem() throws Exception {
         // Defining the mock with Mockito
 
         Item item = new Item();
@@ -42,7 +42,7 @@ public class ItemServiceTest {
     }
 
     @Test
-    public void testGetItems() throws Exception{
+    public void testGetItems() throws Exception {
         // Defining the mock with Mockito
         List<Item> items = new ArrayList<>();
 

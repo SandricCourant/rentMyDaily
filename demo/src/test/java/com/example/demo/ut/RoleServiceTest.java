@@ -83,6 +83,7 @@ public class RoleServiceTest {
         Role result = roleService.get(9);
         Assertions.assertEquals("QUEEN", result.getName());
     }
+
     @Test
     public void testGetRoleNotFound() {
         //Define the Mockito
@@ -91,6 +92,7 @@ public class RoleServiceTest {
         //Assertions
         Assertions.assertThrows(RoleNotFoundException.class, () -> roleService.get(9));
     }
+
     @Test
     public void testRemoveRoleNotFound() {
         //Define the Mockito
@@ -98,18 +100,20 @@ public class RoleServiceTest {
         //Assertions
         Assertions.assertThrows(RoleNotFoundException.class, () -> roleService.remove(9));
     }
+
     @Test
     public void testAttachRoleNotFound() {
         //Define the Mockito
         Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
         //Assertions
-        Assertions.assertThrows(RoleNotFoundException.class, () -> roleService.attach(new Owner(),9));
+        Assertions.assertThrows(RoleNotFoundException.class, () -> roleService.attach(new Owner(), 9));
     }
+
     @Test
     public void testDetachRoleNotFound() {
         //Define the Mockito
         Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
         //Assertions
-        Assertions.assertThrows(RoleNotFoundException.class, () -> roleService.detach(new Owner(),9));
+        Assertions.assertThrows(RoleNotFoundException.class, () -> roleService.detach(new Owner(), 9));
     }
 }

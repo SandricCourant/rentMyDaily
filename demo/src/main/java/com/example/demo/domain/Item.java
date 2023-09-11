@@ -20,6 +20,7 @@ public class Item {
     @JsonIgnore
     private Owner owner;
     private String description;
+
     public int getId() {
         return id;
     }
@@ -60,21 +61,16 @@ public class Item {
         this.subCategories = subCategories;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @Override
     public String toString() {
-        return "Item{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", status=" + status +
-                ", description='" + description + '\'' +
-                '}';
+        return "Item{" + "id=" + id + ", name='" + name + '\'' + ", status=" + status + ", description='" + description + '\'' + '}';
     }
 }

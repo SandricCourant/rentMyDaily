@@ -16,13 +16,15 @@ import org.springframework.web.bind.annotation.*;
 public class ItemController {
     @Autowired
     ItemService itemService;
+
     @GetMapping("view")
-    public ResponseEntity<Iterable<Item>>getAllItems(){
+    public ResponseEntity<Iterable<Item>> getAllItems() {
         return ResponseEntity.ok().body(itemService.getItems());
     }
+
     @PostMapping("add")
-    public ResponseEntity<Item> addItem(@AuthenticationPrincipal Owner user, @RequestBody ItemDto itemDto){
-        Item newItem =  itemService.saveItem(itemDto.getName(), itemDto.getDescription(), user);
+    public ResponseEntity<Item> addItem(@AuthenticationPrincipal Owner user, @RequestBody ItemDto itemDto) {
+        Item newItem = itemService.saveItem(itemDto.getName(), itemDto.getDescription(), user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newItem);
     }

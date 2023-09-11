@@ -35,7 +35,7 @@ public class UserServiceTest {
     AuthenticationManager mockAuthenticationManager;
 
     @Test
-    public void testAuthenticate() throws Exception{
+    public void testAuthenticate() throws Exception {
         //Defining the mock with Mockito
         Authentication authentication = new UsernamePasswordAuthenticationToken("Hello", "Word");
         Mockito.when(mockAuthenticationConfiguration.getAuthenticationManager()).thenReturn(mockAuthenticationManager);
@@ -43,11 +43,11 @@ public class UserServiceTest {
 
         //Assertions
         Authentication result = userService.authenticate("JeanMichel", "Azerty1234!");
-        Assertions.assertEquals("Word",result.getCredentials());
+        Assertions.assertEquals("Word", result.getCredentials());
     }
 
     @Test
-    public void testSave(){
+    public void testSave() {
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -62,7 +62,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testSaveOwnerAlreadyExist(){
+    public void testSaveOwnerAlreadyExist() {
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -75,7 +75,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testGet(){
+    public void testGet() {
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -88,7 +88,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testLoadByUsername(){
+    public void testLoadByUsername() {
         //Define the Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -100,8 +100,9 @@ public class UserServiceTest {
         UserDetails result = userService.loadUserByUsername("World");
         Assertions.assertEquals("Hello", result.getUsername());
     }
+
     @Test
-    public void testLoadByUsernameNotFound(){
+    public void testLoadByUsernameNotFound() {
         //Define the Mockito
         Mockito.when(mockOwnerRepository.findByLogin(ArgumentMatchers.anyString())).thenReturn(null);
 

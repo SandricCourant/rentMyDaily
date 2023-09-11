@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import java.util.Collection;
 
@@ -38,6 +37,10 @@ public class Owner implements UserDetails {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
@@ -79,10 +82,6 @@ public class Owner implements UserDetails {
 
     public void setLogin(String login) {
         this.login = login;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public Collection<Role> getRoles() {

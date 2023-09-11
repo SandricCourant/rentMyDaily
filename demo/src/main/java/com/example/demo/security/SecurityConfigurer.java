@@ -31,14 +31,7 @@ public class SecurityConfigurer {
     public SecurityFilterChain configure(HttpSecurity http) throws Exception {
 
         // Standard pour les REST API
-        return  http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class)
-                .authorizeHttpRequests(auth ->
-                        auth.requestMatchers("/api/v1/account/**").permitAll()
-                                .requestMatchers("/api/v1/items/view").permitAll()
-                                .anyRequest().authenticated()
-                ).build();
+        return http.cors(AbstractHttpConfigurer::disable).csrf(AbstractHttpConfigurer::disable).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).addFilterBefore(securityFilter(), UsernamePasswordAuthenticationFilter.class).authorizeHttpRequests(auth -> auth.requestMatchers("/api/v1/account/**").permitAll().requestMatchers("/api/v1/items/view").permitAll().anyRequest().authenticated()).build();
     }
 
 }
