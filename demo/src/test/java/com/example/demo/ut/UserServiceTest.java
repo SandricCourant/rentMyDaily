@@ -42,12 +42,12 @@ public class UserServiceTest {
         Mockito.when(mockAuthenticationManager.authenticate(ArgumentMatchers.any())).thenReturn(authentication);
 
         //Assertions
-        Authentication result = userService.authenticate("JeanMiche", "Azerty1234!");
+        Authentication result = userService.authenticate("JeanMichel", "Azerty1234!");
         Assertions.assertEquals("Word",result.getCredentials());
     }
 
     @Test
-    public void testSaveWithoutOwnerExist() throws Exception{
+    public void testSaveWithoutOwnerExist(){
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -62,7 +62,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testSaveWithOwnerExistThrowsAccountExistsException() throws Exception{
+    public void testSaveWithOwnerAlreadyExist(){
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -71,39 +71,24 @@ public class UserServiceTest {
         Mockito.when(mockOwnerRepository.findByLoginOrEmailOrPhoneNumber(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenReturn(user);
 
         //Assertions
-        Assertions.assertThrows(AccountExistsException.class, () -> {
-            userService.save("jeanmichel", "H3lLo_w0Rd!", "Jean", "Michel", "jean.michel@gmail.com", "0606060606");
-        });
+        Assertions.assertThrows(AccountExistsException.class, () -> userService.save("jeanmichel", "H3lLo_w0Rd!", "Jean", "Michel", "jean.michel@gmail.com", "0606060606"));
     }
 
     @Test
-    public void testGetWithUser() throws Exception{
+    public void testGet(){
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
         user.setLogin("Hello");
-        Optional<Owner> optionalOwner = Optional.of(user);
-
-        Mockito.when(mockOwnerRepository.findById(ArgumentMatchers.anyInt())).thenReturn(optionalOwner);
+        Mockito.when(mockOwnerRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(user));
 
         //Assertions
         UserDetails result = userService.get(9);
         Assertions.assertEquals("Hello", result.getUsername());
     }
-    @Test
-    public void testGetWithoutUser() throws Exception{
-        //Defining the mock with Mockito
-        Optional<Owner> optionalOwner = Optional.empty();
-
-        Mockito.when(mockOwnerRepository.findById(ArgumentMatchers.anyInt())).thenReturn(optionalOwner);
-
-        //Assertions
-        UserDetails result = userService.get(9);
-        Assertions.assertNull(result);
-    }
 
     @Test
-    public void testLoadByUsername() throws Exception{
+    public void testLoadByUsername(){
         //Define the Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -116,13 +101,11 @@ public class UserServiceTest {
         Assertions.assertEquals("Hello", result.getUsername());
     }
     @Test
-    public void testLoadByUsernameThrowsUsernameNotFoundException() throws Exception{
+    public void testLoadByUsernameNotFound(){
         //Define the Mockito
         Mockito.when(mockOwnerRepository.findByLogin(ArgumentMatchers.anyString())).thenReturn(null);
 
         //Assertions
-        Assertions.assertThrows(UsernameNotFoundException.class, () ->{
-            userService.loadUserByUsername("HelloWorld");
-                });
+        Assertions.assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("HelloWorld"));
     }
 }

@@ -2,6 +2,7 @@ package com.example.demo.controllers;
 
 import com.example.demo.domain.Role;
 import com.example.demo.dto.RoleDto;
+import com.example.demo.exceptions.RoleExistsException;
 import com.example.demo.exceptions.RoleNotFoundException;
 import com.example.demo.exceptions.UserNotFoundException;
 import com.example.demo.services.RoleService;
@@ -33,7 +34,7 @@ public class RoleController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/roles")
-    public ResponseEntity<Role> create(@RequestBody RoleDto dto) throws URISyntaxException {
+    public ResponseEntity<Role> create(@RequestBody RoleDto dto) throws URISyntaxException, RoleExistsException {
         Role role = roleService.create(dto.getName());
         URI uri = new URI("/roles/" + role.getId());
         return ResponseEntity.created(uri).body(role);
@@ -44,16 +45,14 @@ public class RoleController {
     @GetMapping("/roles/{id}")
     public ResponseEntity<Role> get(@PathVariable int id) throws RoleNotFoundException {
         Role role = roleService.get(id);
-        if (role == null) {
-            throw new RoleNotFoundException();
-        }
+
         return ResponseEntity.ok(role);
     }
 
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/roles/{roleId}/users/{userId}/attach")
-    public ResponseEntity<UserDetails> attach(@PathVariable int roleId, @PathVariable int userId) throws URISyntaxException, UserNotFoundException {
+    public ResponseEntity<UserDetails> attach(@PathVariable int roleId, @PathVariable int userId) throws URISyntaxException, UserNotFoundException, RoleNotFoundException {
         UserDetails user = userService.get(userId);
         if (user == null) {
             throw new UserNotFoundException();
@@ -64,7 +63,7 @@ public class RoleController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/roles/{roleId}/users/{userId}/detach")
-    public ResponseEntity<UserDetails> detach(@PathVariable int roleId, @PathVariable int userId) throws URISyntaxException, UserNotFoundException {
+    public ResponseEntity<UserDetails> detach(@PathVariable int roleId, @PathVariable int userId) throws URISyntaxException, UserNotFoundException, RoleNotFoundException {
         UserDetails user = userService.get(userId);
         if (user == null) {
             throw new UserNotFoundException();
@@ -75,7 +74,7 @@ public class RoleController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/roles/{id}")
-    public ResponseEntity<?> delete(@PathVariable int id) {
+    public ResponseEntity<?> delete(@PathVariable int id) throws RoleNotFoundException {
         roleService.remove(id);
         return ResponseEntity.noContent().build();
     }
