@@ -47,7 +47,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testSaveWithoutOwnerExist(){
+    public void testSave(){
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
@@ -62,7 +62,7 @@ public class UserServiceTest {
     }
 
     @Test
-    public void testSaveWithOwnerAlreadyExist(){
+    public void testSaveOwnerAlreadyExist(){
         //Defining the mock with Mockito
         Owner user = new Owner();
         user.setId(1);
