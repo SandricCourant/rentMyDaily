@@ -52,7 +52,7 @@ public class RoleController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/roles/{roleId}/users/{userId}/attach")
-    public ResponseEntity<UserDetails> attach(@PathVariable int roleId, @PathVariable int userId) throws URISyntaxException, UserNotFoundException, RoleNotFoundException {
+    public ResponseEntity<UserDetails> attach(@PathVariable int roleId, @PathVariable int userId) throws UserNotFoundException, RoleNotFoundException {
         UserDetails user = userService.get(userId);
         if (user == null) {
             throw new UserNotFoundException();
@@ -63,7 +63,7 @@ public class RoleController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PostMapping("/roles/{roleId}/users/{userId}/detach")
-    public ResponseEntity<UserDetails> detach(@PathVariable int roleId, @PathVariable int userId) throws URISyntaxException, UserNotFoundException, RoleNotFoundException {
+    public ResponseEntity<UserDetails> detach(@PathVariable int roleId, @PathVariable int userId) throws UserNotFoundException, RoleNotFoundException {
         UserDetails user = userService.get(userId);
         if (user == null) {
             throw new UserNotFoundException();
