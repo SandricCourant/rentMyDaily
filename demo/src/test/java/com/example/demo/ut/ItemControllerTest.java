@@ -47,14 +47,17 @@ public class ItemControllerTest {
         item.setId(1);
         item.setName("waffle");
         Owner owner = new Owner();
+        owner.setId(1);
+        owner.setLogin("UserTest");
         ItemDto itemDto = new ItemDto();
+        itemDto.setName("Testing");
         itemDto.setDescription("I'm a DTO");
 
         Mockito.when(mockItemService.saveItem(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.any(Owner.class))).thenReturn(item);
 
         //Testing
         Item result = itemController.addItem(owner, itemDto).getBody();
-        assert result != null;
+
         Assertions.assertEquals("waffle", result.getName());
     }
 }

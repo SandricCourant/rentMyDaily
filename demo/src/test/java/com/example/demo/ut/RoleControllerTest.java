@@ -204,4 +204,16 @@ public class RoleControllerTest {
             roleController.detach(9, 9);
         });
     }
+    @Test
+    public void testDeleteRole() {
+        Object result = roleController.delete(9).getBody();
+        Assertions.assertNull(result);
+    }
+    @Test
+    public void testDeleteRoleNotFound() {
+        Mockito.doThrow(new RoleNotFoundException()).when(mockRoleService).remove(ArgumentMatchers.anyInt());
+        Assertions.assertThrows(RoleNotFoundException.class, () -> {
+           roleController.delete(9);
+        });
+    }
 }

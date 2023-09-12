@@ -2,6 +2,7 @@ package com.example.demo.ut;
 
 import com.example.demo.controllers.SecurityController;
 import com.example.demo.domain.Owner;
+import com.example.demo.dto.AuthRequestDto;
 import com.example.demo.dto.AuthResponseDto;
 import com.example.demo.dto.RegisterRequestDto;
 import com.example.demo.exceptions.AccountExistsException;
@@ -14,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @SpringBootTest
@@ -67,14 +70,17 @@ public class SecurityControllerTest {
             securityController.register(dto);
         });
     }
-/*
+
     @Test
     public void testAuthorize() throws Exception {
         //Defining the mock with Mockito
         AuthRequestDto authRequestDto = new AuthRequestDto();
         authRequestDto.setUsername("UserTest");
         authRequestDto.setPassword("testingPassword");
-        Authentication authentication = new UsernamePasswordAuthenticationToken("Hello", "World");
+        Owner owner = new Owner();
+        owner.setId(1);
+        owner.setLogin("Test");
+        Authentication authentication = new UsernamePasswordAuthenticationToken(owner, "HelloWorld");
 
         String jwt = "jwtTokenForTesting";
 
@@ -85,5 +91,5 @@ public class SecurityControllerTest {
         AuthResponseDto result = securityController.authorize(authRequestDto).getBody();
         assert result != null;
         Assertions.assertEquals("jwtTokenForTesting", result.getToken());
-    }*/
+    }
 }
