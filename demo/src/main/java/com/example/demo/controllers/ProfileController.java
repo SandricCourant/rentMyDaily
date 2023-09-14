@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/")
 public class ProfileController {
 
-    @GetMapping("/me")
+    @GetMapping("me")
     public ResponseEntity<UserDetails> me(@AuthenticationPrincipal Owner user) {
         return ResponseEntity.ok(user); // Sending a 200 HTTP status code
     }

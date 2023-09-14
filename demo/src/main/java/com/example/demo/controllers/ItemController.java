@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin()
 @RestController
-@RequestMapping("/api/v1/items")
+@RequestMapping("/api/v1/items/")
 public class ItemController {
     @Autowired
     ItemService itemService;
