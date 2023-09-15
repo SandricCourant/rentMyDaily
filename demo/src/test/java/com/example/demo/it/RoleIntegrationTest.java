@@ -62,6 +62,20 @@ public class RoleIntegrationTest {
         String responseBody = mvcResult.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.contains("\"name\":\"ROLE_QUEEN\""));
     }
+    @Test
+    public void testCreateRoleAlreadyExist() throws Exception {
+        //Defining the mock with Mockito
+        Role role = new Role();
+        role.setId(1);
+        role.setName("ROLE_QUEEN");
+        Mockito.when(mockRoleRepository.findByName(ArgumentMatchers.anyString())).thenReturn(Optional.of(role));
+        //Testing
+        String requestBody = "{\"name\":\"ROLE_QUEEN\"}";
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/roles").contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(MockMvcResultMatchers.status().isConflict()).andReturn();
+        String responseBody = mvcResult.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("Role already exists"));
+    }
 
     @Test
     public void testGetRole() throws Exception {
@@ -74,6 +88,16 @@ public class RoleIntegrationTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/roles/9")).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
         String responseBody = mvcResult.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.contains("\"name\":\"ROLE_QUEEN\""));
+    }
+    @Test
+    public void testGetRoleNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        //Testing
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/roles/9")).andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+        String responseBody = mvcResult.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("Role not found"));
     }
 
     @Test
@@ -96,6 +120,40 @@ public class RoleIntegrationTest {
         String responseBody = mvcResult.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.contains("\"login\":\"UserTest\"") && responseBody.contains("\"name\":\"ROLE_QUEEN\""));
     }
+    @Test
+    public void testAttachRoleToUserNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Role role = new Role();
+        role.setId(1);
+        role.setName("ROLE_QUEEN");
+        Mockito.when(mockOwnerRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(role));
+        //Testing
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/roles/9/users/9/attach"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn();
+        String responseBody = mvcResult.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("User not found"));
+    }
+    @Test
+    public void testAttachRoleNotFoundToUser() throws Exception {
+        //Defining the mock with Mockito
+        Owner owner = new Owner();
+        Collection<Role> roles = new ArrayList<>();//Roles already attached to user
+        owner.setId(1);
+        owner.setLogin("UserTest");
+        owner.setRoles(roles);
+        Mockito.when(mockOwnerRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(owner));
+        Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        //Testing
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/roles/9/users/9/attach"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn();
+        String responseBody = mvcResult.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("Role not found"));
+    }
 
     @Test
     public void testDetachRoleToUser() throws Exception {
@@ -116,7 +174,40 @@ public class RoleIntegrationTest {
         String responseBody = mvcResult.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.contains("\"login\":\"UserTest\"") && responseBody.contains("\"roles\":[]"));
     }
-
+    @Test
+    public void testDetachRoleToUserNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Role role = new Role();
+        role.setId(1);
+        role.setName("ROLE_QUEEN");
+        Mockito.when(mockOwnerRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(role));
+        //Testing
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/roles/9/users/9/detach"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn();
+        String responseBody = mvcResult.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("User not found"));
+    }
+    @Test
+    public void testDetachRoleNotFoundToUser() throws Exception {
+        //Defining the mock with Mockito
+        Owner owner = new Owner();
+        Collection<Role> roles = new ArrayList<>();//Roles already attached to user
+        owner.setId(1);
+        owner.setLogin("UserTest");
+        owner.setRoles(roles);
+        Mockito.when(mockOwnerRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(owner));
+        Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        //Testing
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/roles/9/users/9/detach"))
+                .andExpect(MockMvcResultMatchers.status().isNotFound())
+                .andReturn();
+        String responseBody = mvcResult.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("Role not found"));
+    }
     @Test
     public void testDeleteRole() throws Exception {
         //Defining the mock with Mockito
@@ -125,5 +216,15 @@ public class RoleIntegrationTest {
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/roles/9")).andExpect(MockMvcResultMatchers.status().isNoContent()).andReturn();
         String responseBody = mvcResult.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.isEmpty());
+    }
+    @Test
+    public void testDeleteRoleNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        //Testing
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/roles/9")).andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+        String responseBody = mvcResult.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("Role not found"));
     }
 }

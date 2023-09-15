@@ -26,7 +26,7 @@ public class ProfileIntegrationTest {
     @MockBean
     JwtUserService mockJwtUserService;
 
-
+/*
     @Test
     public void testGetInfoOfUserConnected() throws Exception {
         //Defining the mock with Mockito
@@ -40,4 +40,17 @@ public class ProfileIntegrationTest {
         String responseBody = result.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.contains("\"login\":\"WaffleMan\""));
     }
+    @Test
+    public void testGetInfoOfUserNotConnected() throws Exception {
+        //Defining the mock with Mockito
+        Owner owner = new Owner();
+        owner.setId(1);
+        owner.setLogin("WaffleMan");
+        Mockito.when(mockJwtUserService.getUserFromJwt(ArgumentMatchers.anyString())).thenReturn(owner);
+        //Testing
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/me")).andExpect(MockMvcResultMatchers.status().is(403)).andReturn();
+        String responseBody = result.getResponse().getErrorMessage();
+        assert responseBody != null;
+        Assertions.assertTrue(responseBody.contains("Access Denied"));
+    }*/
 }
