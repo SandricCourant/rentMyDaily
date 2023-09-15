@@ -56,11 +56,11 @@ public class ItemIntegrationTest {
 
         //Testing
         String requestBody = "{\"name\":\"squeegee\",\"description\":\"a squeegee to rent\"}";
-        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/items/add")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(requestBody))
-                .andExpect(MockMvcResultMatchers.status().isCreated())
-                .andReturn();
+        MvcResult result = mockMvc.perform(
+                MockMvcRequestBuilders.post("/api/v1/items/add")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
         String responseBody = result.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.contains("\"name\":\"waffle\""));
     }

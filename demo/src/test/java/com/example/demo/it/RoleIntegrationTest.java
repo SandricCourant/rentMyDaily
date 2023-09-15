@@ -119,6 +119,8 @@ public class RoleIntegrationTest {
 
     @Test
     public void testDeleteRole() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.when(mockRoleRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(new Role()));
         //Testing
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/roles/9")).andExpect(MockMvcResultMatchers.status().isNoContent()).andReturn();
         String responseBody = mvcResult.getResponse().getContentAsString();
