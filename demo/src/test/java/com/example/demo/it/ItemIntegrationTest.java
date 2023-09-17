@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Optional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -63,5 +64,31 @@ public class ItemIntegrationTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated()).andReturn();
         String responseBody = result.getResponse().getContentAsString();
         Assertions.assertTrue(responseBody.contains("\"name\":\"waffle\""));
+    }
+    @Test
+    @WithMockUser()
+    public void testRemoveItem() throws Exception {
+        //Defining the mock with Mockito
+        Item item = new Item();
+        item.setId(1);
+        item.setName("waffle");
+        Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(item));
+
+        //Testing
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/items/9/remove")).andExpect(MockMvcResultMatchers.status().isNoContent()).andReturn();
+        int responseStatus = result.getResponse().getStatus();
+        Assertions.assertEquals(204, responseStatus);
+    }
+    @Test
+    @WithMockUser()
+    public void testRemoveItemNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+
+        //Testing
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/items/9/remove")).andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+        String responseError = result.getResponse().getErrorMessage();
+        assert responseError != null;
+        Assertions.assertTrue(responseError.contains("Item not found"));
     }
 }

@@ -3,6 +3,7 @@ package com.example.demo.controllers;
 import com.example.demo.domain.Item;
 import com.example.demo.domain.Owner;
 import com.example.demo.dto.ItemDto;
+import com.example.demo.exceptions.ItemNotFoundException;
 import com.example.demo.services.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,5 +28,10 @@ public class ItemController {
         Item newItem = itemService.saveItem(itemDto.getName(), itemDto.getDescription(), user);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(newItem);
+    }
+    @DeleteMapping("/{id}/remove")
+    public ResponseEntity<?> removeItem(@PathVariable int id) throws ItemNotFoundException {
+        itemService.remove(id);
+        return ResponseEntity.noContent().build();
     }
 }

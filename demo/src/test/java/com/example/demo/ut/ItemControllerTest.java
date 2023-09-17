@@ -4,6 +4,7 @@ import com.example.demo.controllers.ItemController;
 import com.example.demo.domain.Item;
 import com.example.demo.domain.Owner;
 import com.example.demo.dto.ItemDto;
+import com.example.demo.exceptions.ItemNotFoundException;
 import com.example.demo.services.ItemService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -59,5 +60,20 @@ public class ItemControllerTest {
         Item result = itemController.addItem(owner, itemDto).getBody();
 
         Assertions.assertEquals("waffle", result.getName());
+    }
+    @Test
+    public void testRemoveItem() throws Exception {
+        //Testing
+        Object result = itemController.removeItem(9).getBody();
+        Assertions.assertNull(result);
+    }
+    @Test
+    public void testRemoveItemNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.doThrow(ItemNotFoundException.class).when(mockItemService).remove(ArgumentMatchers.anyInt());
+        //Testing
+        Assertions.assertThrows(ItemNotFoundException.class, () -> {
+            itemController.removeItem(9);
+        });
     }
 }

@@ -1,7 +1,6 @@
 package com.example.demo.it;
 
 import com.example.demo.domain.Owner;
-import com.example.demo.security.SecurityFilter;
 import com.example.demo.services.JwtUserService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -26,7 +24,6 @@ public class ProfileIntegrationTest {
     @MockBean
     JwtUserService mockJwtUserService;
 
-/*
     @Test
     public void testGetInfoOfUserConnected() throws Exception {
         //Defining the mock with Mockito
@@ -52,5 +49,5 @@ public class ProfileIntegrationTest {
         String responseBody = result.getResponse().getErrorMessage();
         assert responseBody != null;
         Assertions.assertTrue(responseBody.contains("Access Denied"));
-    }*/
+    }
 }

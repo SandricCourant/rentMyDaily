@@ -3,6 +3,7 @@ package com.example.demo.ut;
 import com.example.demo.DemoApplication;
 import com.example.demo.domain.Item;
 import com.example.demo.domain.Owner;
+import com.example.demo.exceptions.ItemNotFoundException;
 import com.example.demo.repositories.ItemRepository;
 import com.example.demo.services.ItemService;
 import org.junit.jupiter.api.Assertions;
@@ -17,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 
 @SpringBootTest
@@ -38,7 +40,7 @@ public class ItemServiceTest {
 
         Mockito.when(mockItemRepository.save(ArgumentMatchers.any(Item.class))).thenReturn(item);
 
-        //Assertions
+        //Testing
         Item result = itemService.saveItem("any", "anything", new Owner());
         Assertions.assertEquals("waffle", result.getName());
     }
@@ -50,8 +52,18 @@ public class ItemServiceTest {
 
         Mockito.when(mockItemRepository.findAll()).thenReturn(items);
 
-        //Assertions
+        //Testing
         Iterable<Item> results = itemService.getItems();
         Assertions.assertIterableEquals(results, items);
+    }
+    @Test
+    public void testRemoveItemNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+
+        //Testing
+        Assertions.assertThrows(ItemNotFoundException.class, () -> {
+           itemService.remove(9);
+        });
     }
 }
