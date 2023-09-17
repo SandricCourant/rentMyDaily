@@ -9,6 +9,7 @@ import com.example.demo.services.ItemService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -59,6 +60,7 @@ public class ItemControllerTest {
         //Testing
         Item result = itemController.addItem(owner, itemDto).getBody();
 
+        assert result != null;
         Assertions.assertEquals("waffle", result.getName());
     }
     @Test
@@ -74,6 +76,40 @@ public class ItemControllerTest {
         //Testing
         Assertions.assertThrows(ItemNotFoundException.class, () -> {
             itemController.removeItem(9);
+        });
+    }
+    @Test
+    public void testModifyItem() throws Exception {
+        //Defining the mock with Mockito
+        Item item = new Item();
+        item.setId(1);
+        item.setName("waffle");
+        Owner owner = new Owner();
+        owner.setId(1);
+        item.setUser(owner);
+        ItemDto itemDto = new ItemDto();
+        itemDto.setName("squeegee");
+        itemDto.setDescription("a good item");
+        Mockito.when(mockItemService.getItem(ArgumentMatchers.anyInt())).thenReturn(item);
+        Mockito.when(mockItemService.saveItem(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.any(Owner.class))).thenReturn(item);
+
+        //Testing
+        Item result = itemController.modifyItem(itemDto, 9).getBody();
+        //TODO trouver pourquoi result est null
+        assert result != null;
+        Assertions.assertEquals("squeegee", result.getName());
+    }
+    @Test
+    public void testModifyItemNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.when(mockItemService.getItem(ArgumentMatchers.anyInt())).thenThrow(ItemNotFoundException.class);
+
+        //Testing
+        Assertions.assertThrows(ItemNotFoundException.class, () -> {
+            ItemDto itemDto = new ItemDto();
+            itemDto.setName("squeegee");
+            itemDto.setDescription("a good item");
+            itemController.modifyItem(itemDto, 9);
         });
     }
 }

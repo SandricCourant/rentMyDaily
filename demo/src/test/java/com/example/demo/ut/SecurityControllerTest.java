@@ -55,18 +55,17 @@ public class SecurityControllerTest {
     @Test
     public void testRegisterWithOwnerAlreadyExist() {
         //Defining the mock with Mockito
-        RegisterRequestDto dto = new RegisterRequestDto();
-        dto.setUsername("testing");
-        dto.setPassword("testing");
-        dto.setFirstname("testing");
-        dto.setLastname("testing");
-        dto.setEmail("testing");
-        dto.setPhoneNumber("testing");
-
         Mockito.when(mockJwtUserService.save(ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString(), ArgumentMatchers.anyString())).thenThrow(AccountExistsException.class);
 
         //Testing
         Assertions.assertThrows(AccountExistsException.class, () -> {
+            RegisterRequestDto dto = new RegisterRequestDto();
+            dto.setUsername("testing");
+            dto.setPassword("testing");
+            dto.setFirstname("testing");
+            dto.setLastname("testing");
+            dto.setEmail("testing");
+            dto.setPhoneNumber("testing");
             securityController.register(dto);
         });
     }

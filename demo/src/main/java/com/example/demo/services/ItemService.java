@@ -10,4 +10,6 @@ public interface ItemService {
     Iterable<Item> getItems();
 
     void remove(int id) throws ItemNotFoundException;
+
+    Item getItem(int id) throws ItemNotFoundException;
 }

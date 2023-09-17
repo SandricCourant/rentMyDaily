@@ -57,13 +57,33 @@ public class ItemServiceTest {
         Assertions.assertIterableEquals(results, items);
     }
     @Test
-    public void testRemoveItemNotFound() throws Exception {
+    public void testRemoveItemNotFound() {
         //Defining the mock with Mockito
         Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
 
         //Testing
         Assertions.assertThrows(ItemNotFoundException.class, () -> {
            itemService.remove(9);
+        });
+    }
+    @Test
+    public void testGetItem() throws Exception {
+        //Defining the mock with Mockito
+        Item item = new Item();
+        item.setId(1);
+        item.setName("waffle");
+        Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(item));
+        //Testing
+        Item result = itemService.getItem(9);
+        Assertions.assertEquals("waffle", result.getName());
+    }
+    @Test
+    public void testGetItemNotFound() {
+        //Defining the mock with Mockito
+        Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        //Testing
+        Assertions.assertThrows(ItemNotFoundException.class, () -> {
+            itemService.getItem(9);
         });
     }
 }

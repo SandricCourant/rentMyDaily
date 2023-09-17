@@ -84,13 +84,12 @@ public class RoleControllerTest {
     @Test
     public void testCreateRoleAlreadyExist() {
         //Defining the mock with Mockito
-        RoleDto dto = new RoleDto();
-        dto.setName("QUEEN");
-
         Mockito.when(mockRoleService.create(ArgumentMatchers.anyString())).thenThrow(RoleExistsException.class);
 
         //Testing
         Assertions.assertThrows(RoleExistsException.class, () -> {
+            RoleDto dto = new RoleDto();
+            dto.setName("QUEEN");
             roleController.create(dto);
         });
     }

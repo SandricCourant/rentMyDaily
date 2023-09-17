@@ -1,6 +1,7 @@
 package com.example.demo.it;
 
 import com.example.demo.domain.Item;
+import com.example.demo.domain.Owner;
 import com.example.demo.repositories.ItemRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -87,6 +88,37 @@ public class ItemIntegrationTest {
 
         //Testing
         MvcResult result = mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/items/9/remove")).andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
+        String responseError = result.getResponse().getErrorMessage();
+        assert responseError != null;
+        Assertions.assertTrue(responseError.contains("Item not found"));
+    }
+
+    @Test
+    @WithMockUser()
+    public void testModifyItem() throws Exception {
+        //Defining the mock with Mockito
+        Item item = new Item();
+        item.setId(1);
+        item.setName("waffle");
+        Owner owner = new Owner();
+        owner.setId(1);
+        item.setUser(owner);
+        Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.of(item));
+        Mockito.when(mockItemRepository.save(ArgumentMatchers.any(Item.class))).thenReturn(item);
+        //Testing
+        String requestBody = "{\"name\":\"squeegee\",\"description\":\"a good item\"}";
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/items/9/update").contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(MockMvcResultMatchers.status().isOk()).andReturn();
+        String responseBody = result.getResponse().getContentAsString();
+        Assertions.assertTrue(responseBody.contains("\"name\":\"squeegee\""));
+    }
+    @Test
+    @WithMockUser()
+    public void testModifyItemNotFound() throws Exception {
+        //Defining the mock with Mockito
+        Mockito.when(mockItemRepository.findById(ArgumentMatchers.anyInt())).thenReturn(Optional.empty());
+        //Testing
+        String requestBody = "{\"name\":\"squeegee\",\"description\":\"a good item\"}";
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/api/v1/items/9/update").contentType(MediaType.APPLICATION_JSON).content(requestBody)).andExpect(MockMvcResultMatchers.status().isNotFound()).andReturn();
         String responseError = result.getResponse().getErrorMessage();
         assert responseError != null;
         Assertions.assertTrue(responseError.contains("Item not found"));

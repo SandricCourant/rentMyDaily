@@ -34,4 +34,12 @@ public class ItemController {
         itemService.remove(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{id}/update")
+    public ResponseEntity<Item> modifyItem(@RequestBody ItemDto itemDto, @PathVariable int id) throws ItemNotFoundException {
+        Item oldItem = itemService.getItem(id);
+        oldItem.setName(itemDto.getName());
+        oldItem.setDescription(itemDto.getDescription());
+        Item newItem = itemService.saveItem(oldItem.getName(), oldItem.getDescription(), oldItem.getUser());
+        return ResponseEntity.status(HttpStatus.OK).body(newItem);
+    }
 }

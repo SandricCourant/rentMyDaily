@@ -36,4 +36,9 @@ public class ItemServiceImpl implements ItemService {
     public void remove(int id) throws ItemNotFoundException {
         itemRepository.delete(itemRepository.findById(id).orElseThrow(ItemNotFoundException::new));
     }
+
+    @Override
+    public Item getItem(int id) throws ItemNotFoundException {
+        return itemRepository.findById(id).orElseThrow(ItemNotFoundException::new);
+    }
 }
